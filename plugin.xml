@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<plugin xmlns="http://cordova.apache.org/ns/plugins/1.0"
+           id="cordova-plugin-metronomeplugin"
+      version="0.0.1">
+    <name>MetronomePlugin</name>
+
+    <js-module src="www/template.js" name="MetronomePlugin">
+        <clobbers target="cordova.plugins.MetronomePlugin.setBeat" />
+    </js-module>
+    
+    <!-- TODO: Uncomment this if you would like to add Android support -->
+    <!-- android -->
+    <!--    
+    <platform name="android">
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="Echo" >
+                <param name="android-package" value="org.apache.cordova.test.Echo"/>
+            </feature>
+        </config-file>
+
+        <source-file src="src/android/Echo.java" target-dir="src/org/apache/cordova/test" />
+    </platform>
+    -->
+
+    <!-- TODO: Uncomment this if you would like to add iOS support -->
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="Echo">
+                <param name="ios-package" value="CDVEcho"/>
+            </feature>
+        </config-file>
+        <source-file src="src/ios/CDVEcho.m" />
+        <header-file src="src/ios/Metronome/Metronome.h" />
+        <source-file src="src/ios/Metronome/Metronome.m" />
+        <resource-file src="src/ios/Metronome/MoreCowbell.caf" />
+    </platform>
+
+    <platform name="browser">
+        <js-module src="www/template.js" name="MetronomePlugin">
+            <runs />
+        </js-module>
+    </platform>
+
+</plugin>
