@@ -26,7 +26,7 @@
     
     _callbackParams = @[pluginResult, command.callbackId];
     
-    NSTimer metronome
+    // NSTimer metronome
        [self handleNSTimerWithSpeed:speed];
     
     //apple provided metronome with AVAudioEngine and AVAudioPlayerNode
