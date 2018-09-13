@@ -31,11 +31,11 @@
        // on scroll the beat stops!!! 
     
     //apple provided metronome with AVAudioEngine and AVAudioPlayerNode
-    //    [self handleMetronomeWithSpeed:speed];
+       [self handleMetronomeWithSpeed:speed];
         // works great!
 
     //absolute time timer
-       [self handleAbsoluteTimeTimerWithSpeed:speed];
+    //    [self handleAbsoluteTimeTimerWithSpeed:speed];
 }
 
 #pragma mark timer
