@@ -32,9 +32,9 @@
             </feature>
         </config-file>
         <source-file src="src/ios/CDVEcho.m" />
-        <header-file src="src/ios/Metronome/Metronome.h" />
-        <source-file src="src/ios/Metronome/Metronome.m" />
-        <resource-file src="src/ios/Metronome/MoreCowbell.caf" />
+        <header-file src="src/ios/Metronome.h" />
+        <source-file src="src/ios/Metronome.m" />
+        <resource-file src="src/ios/MoreCowbell.caf" />
     </platform>
 
     <platform name="browser">
