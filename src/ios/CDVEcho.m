@@ -26,16 +26,14 @@
     
     _callbackParams = @[pluginResult, command.callbackId];
     
-    // NSTimer metronome
+    //NSTimer metronome
     //    [self handleNSTimerWithSpeed:speed];
-       // on scroll the beat stops!!! 
     
     //apple provided metronome with AVAudioEngine and AVAudioPlayerNode
-       [self handleMetronomeWithSpeed:speed];
-        // works great!
-
+    //    [self handleMetronomeWithSpeed:speed];
+    
     //absolute time timer
-       // [self handleAbsoluteTimeTimerWithSpeed:speed];
+    //    [self handleAbsoluteTimeTimerWithSpeed:speed];
 }
 
 #pragma mark timer
