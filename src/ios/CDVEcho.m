@@ -10,6 +10,7 @@
 @property (nonatomic) CFAbsoluteTime lastTick;
 
 @property (nonatomic, retain) AVAudioPlayer *player;
+@property (nonatomic, retain) UIImpactFeedbackGenerator *haptic;
 
 @property (nonatomic, retain, readonly) NSURL *soundUrl;
 
@@ -27,13 +28,13 @@
     _callbackParams = @[pluginResult, command.callbackId];
     
     //NSTimer metronome
-    //    [self handleNSTimerWithSpeed:speed];
+        // [self handleNSTimerWithSpeed:speed];
     
     //apple provided metronome with AVAudioEngine and AVAudioPlayerNode
-    //    [self handleMetronomeWithSpeed:speed];
+	[self handleMetronomeWithSpeed:speed];
     
     //absolute time timer
-    //    [self handleAbsoluteTimeTimerWithSpeed:speed];
+//       [self handleAbsoluteTimeTimerWithSpeed:speed];
 }
 
 #pragma mark timer
@@ -80,6 +81,10 @@
         _metronome = [[Metronome alloc] init:self.soundUrl];
         _metronome.delegate = self;
     }
+
+    if (!_haptic) {
+    	_haptic = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+	}
     
     [_metronome setTempo:speed.floatValue];
     
@@ -95,6 +100,9 @@
 #pragma mark fire
 
 - (void)fire {
+	dispatch_async(dispatch_get_main_queue(), ^{
+	    [_haptic impactOccurred];
+	});
     CDVPluginResult *pluginResult = _callbackParams[0];
     NSString *callbackId = _callbackParams[1];
     
@@ -113,6 +121,9 @@
         _player = [[AVAudioPlayer alloc] initWithContentsOfURL:self.soundUrl error:nil];
         [_player setVolume:1];
     }
+    if (!_haptic) {
+    	_haptic = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+	}
 }
 
 - (void)playSound {
