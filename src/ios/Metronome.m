@@ -33,6 +33,8 @@ static const float kTempoChangeResponsivenessSeconds = 0.250f;
 //    BOOL    _playing;
     BOOL    _playerStarted;
     
+    int32_t _duration_ns;
+    
     id<MetronomeDelegate> __weak _delegate;
 }
 
@@ -63,11 +65,14 @@ static const float kTempoChangeResponsivenessSeconds = 0.250f;
 			_soundBuf1 = [[AVAudioPCMBuffer alloc] initWithPCMFormat: format
                                                        frameCapacity: (AVAudioFrameCount)file.length];
 
+
 			[file readIntoBuffer: _soundBuf1 error:nil];
             
             // Use the same audio buffer for both bips.
             _soundBuffer[0] = _soundBuf1;
             _soundBuffer[1] = _soundBuf1;
+
+			_duration_ns = (_soundBuffer[_bufferNumber].frameLength / _soundBuffer[_bufferNumber].format.sampleRate) * NSEC_PER_SEC;
 		} else {
             // Use two triangle waves which are generate for the metronome bips.
             
@@ -137,7 +142,7 @@ static const float kTempoChangeResponsivenessSeconds = 0.250f;
 		AVAudioFramePosition beatSampleTime = (AVAudioFramePosition)_nextBeatSampleTime;
 		AVAudioTime *playerBeatTime = [AVAudioTime timeWithSampleTime: beatSampleTime atRate: _bufferSampleRate];
 			// This time is relative to the player's start time.
-
+			
         [_player scheduleBuffer:_soundBuffer[_bufferNumber] atTime:playerBeatTime options:0 completionHandler:^{
             dispatch_sync(_syncQueue, ^{
 				_beatsScheduled -= 1;
@@ -165,7 +170,7 @@ static const float kTempoChangeResponsivenessSeconds = 0.250f;
 			
 			//NSLog(@"%@ %@ %.6f", playerBeatTime, nodeBeatTime, output.presentationLatency);
 			uint64_t latencyHostTicks = [AVAudioTime hostTimeForSeconds: output.presentationLatency];
-			dispatch_after(dispatch_time(nodeBeatTime.hostTime + latencyHostTicks, 0), dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0), ^{
+			dispatch_after(dispatch_time(nodeBeatTime.hostTime + latencyHostTicks, -_duration_ns), dispatch_get_main_queue(), ^{
 				// hardcoded to 4/4 meter
 				if (_playing)
 					[_delegate metronomeTicking: self bar: (callbackBeat / 4) + 1 beat: (callbackBeat % 4) + 1];

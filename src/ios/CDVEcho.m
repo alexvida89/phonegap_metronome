@@ -100,9 +100,8 @@
 #pragma mark fire
 
 - (void)fire {
-	dispatch_async(dispatch_get_main_queue(), ^{
-	    [_haptic impactOccurred];
-	});
+	[_haptic impactOccurred];
+	[_haptic prepare];
     CDVPluginResult *pluginResult = _callbackParams[0];
     NSString *callbackId = _callbackParams[1];
     
@@ -122,7 +121,7 @@
         [_player setVolume:1];
     }
     if (!_haptic) {
-    	_haptic = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
+    	_haptic = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleHeavy];
 	}
 }
 
