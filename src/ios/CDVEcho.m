@@ -1,6 +1,8 @@
 
 #import <Cordova/CDV.h>
 #import "Metronome.h"
+#import "HapticMetronome.h"
+#import "SoundMetronome.h"
 
 @interface CDVEcho : CDVPlugin <MetronomeDelegate>
 
@@ -10,13 +12,56 @@
 @property (nonatomic) CFAbsoluteTime lastTick;
 
 @property (nonatomic, retain) AVAudioPlayer *player;
-@property (nonatomic, retain) UIImpactFeedbackGenerator *haptic;
 
 @property (nonatomic, retain, readonly) NSURL *soundUrl;
 
 @end
 
 @implementation CDVEcho
+
+- (void)set_haptic_speed:(NSInteger)speed {
+
+/*  
+    use haptic_start and haptic_stop to control the metronome
+    haptic_start takes speed (bpm) as integer and NSString* to define measure
+    
+    Supported alphabet for defining measures:
+        X -> tripple heavy impact
+        H -> double heavy impact
+        M -> double medium impact
+        L -> double light impact
+        h -> heavy impact
+        m -> medium impact
+        l -> light impact
+        E -> error
+        S -> success
+        W -> warning
+        F -> selection
+          -> (space) no sound
+*/
+
+    haptic_start(speed, @"XlHlHll"); //balkan!
+}
+
+- (void)set_sound_speed:(NSInteger)speed {
+/*
+    use sound_start and sound_stop to control the metronome 
+    haptic_start takes speed (bpm) as integer and NSString* to define measure
+    sound_define is used to define alphabet at runtime, it takes NSUrl* (path to file), char of the alphabet it will map to and volume (sould be between 0 and 1)
+    sound_define needs to be executed only once, but it can be executed multiple times (there may be a performance penalty, but it will work)
+    All sound samples must be in same format (sample rate, sample depth, stereo/mono, codec). 
+*/
+
+    //the following block executes sound_define calls once
+    static dispatch_once_t once_token;
+    dispatch_once (&once_token, ^{
+        NSURL* s = [[NSBundle mainBundle] URLForResource:@"MoreCowbell" withExtension:@"caf"];
+        sound_define(s, 'H', 1);
+        sound_define(s, 'L', 0.20);
+    });
+    
+    sound_start(speed, @"HLHL");
+}
 
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
     NSNumber *speed = [command.arguments objectAtIndex:0];
@@ -27,110 +72,18 @@
     
     _callbackParams = @[pluginResult, command.callbackId];
     
-    //NSTimer metronome
-        // [self handleNSTimerWithSpeed:speed];
+    //sound example
+    //[self set_sound_speed:speed.integerValue];
     
-    //apple provided metronome with AVAudioEngine and AVAudioPlayerNode
-	[self handleMetronomeWithSpeed:speed];
-    
-    //absolute time timer
-//       [self handleAbsoluteTimeTimerWithSpeed:speed];
+    //haptic example
+    [self set_haptic_speed:speed.integerValue];
 }
-
-#pragma mark timer
-
-- (void)handleNSTimerWithSpeed:(NSNumber *)speed {
-    [self configPlayer];
-    [_timer invalidate];
-    _timer = [NSTimer scheduledTimerWithTimeInterval:(60/speed.doubleValue)
-                                              target:self
-                                            selector:@selector(fireWithSound)
-                                            userInfo:nil
-                                             repeats:YES];
-}
-
-#pragma mark absolute time
-
-- (void)handleAbsoluteTimeTimerWithSpeed:(NSNumber *)speed {
-    [self configPlayer];
-    [_timer invalidate];
-    _timer = [NSTimer scheduledTimerWithTimeInterval:(60/speed.doubleValue)/100
-                                              target:self
-                                            selector:@selector(absoluteTick:)
-                                            userInfo:@{@"speed": speed}
-                                             repeats:YES];
-    
-}
-
-- (void)absoluteTick:(NSTimer *)timer {
-    NSNumber *speed = timer.userInfo[@"speed"];
-    
-    CFAbsoluteTime elapsedTime = CFAbsoluteTimeGetCurrent() - _lastTick;
-    double targetTime = 60/speed.doubleValue;
-    if (elapsedTime > targetTime || (fabs(elapsedTime - targetTime) < 0.002)) {
-        _lastTick = CFAbsoluteTimeGetCurrent();
-        [self fireWithSound];
-    }
-    
-}
-
-#pragma mark apple
-
-- (void)handleMetronomeWithSpeed:(NSNumber *)speed {
-    if (!_metronome) {
-        _metronome = [[Metronome alloc] init:self.soundUrl];
-        _metronome.delegate = self;
-    }
-
-    if (!_haptic) {
-    	_haptic = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleMedium];
-	}
-    
-    [_metronome setTempo:speed.floatValue];
-    
-    if (!_metronome.playing) {
-        [_metronome start];
-    }
-}
-
-- (void)metronomeTicking:(Metronome *)metronome bar:(SInt32)bar beat:(SInt32)beat {
-    [self fire];
-}
-
-#pragma mark fire
 
 - (void)fire {
-	[_haptic impactOccurred];
-	[_haptic prepare];
     CDVPluginResult *pluginResult = _callbackParams[0];
     NSString *callbackId = _callbackParams[1];
     
     [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
-}
-
-- (void)fireWithSound {
-    [self fire];
-    [self playSound];
-}
-
-#pragma mark sound
-
-- (void)configPlayer {
-    if (!_player) {
-        _player = [[AVAudioPlayer alloc] initWithContentsOfURL:self.soundUrl error:nil];
-        [_player setVolume:1];
-    }
-    if (!_haptic) {
-    	_haptic = [[UIImpactFeedbackGenerator alloc] initWithStyle:UIImpactFeedbackStyleHeavy];
-	}
-}
-
-- (void)playSound {
-    [_player play];
-}
-
-- (NSURL *)soundUrl {
-    return [[NSBundle mainBundle] URLForResource:@"MoreCowbell" withExtension:@"caf"];
 }
 
 @end
