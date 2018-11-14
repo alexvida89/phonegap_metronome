@@ -31,14 +31,14 @@
                 <param name="ios-package" value="CDVEcho"/>
             </feature>
         </config-file>
-        <source-file src="src/ios/CDVEcho.m" />
+        <source-file src="src/ios/CDVEcho.mm" />
         <header-file src="src/ios/HapticMetronome.h" />
-        <source-file src="src/ios/HapticMetronome.m" />
+        <source-file src="src/ios/HapticMetronome.mm" />
         <header-file src="src/ios/Metronome.h" />
         <source-file src="src/ios/Metronome.m" />
         <resource-file src="src/ios/MoreCowbell.caf" />
         <header-file src="src/ios/SoundMetronome.h" />
-        <source-file src="src/ios/SoundMetronome.m" />
+        <source-file src="src/ios/SoundMetronome.mm" />
 
 
     </platform>
