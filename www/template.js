@@ -7,5 +7,5 @@ var exec = cordova.require('cordova/exec'),
 
 module.exports = function setBeat(speed, callback) {
     // exec(callback, callback, 'Echo', 'setBeatSpeed', [speed]);
-    exec(callback, callback, 'Echo', 'haptic_start ', [speed]);
+    exec(callback, callback, 'Echo', 'sound_start ', [speed]);
 };
