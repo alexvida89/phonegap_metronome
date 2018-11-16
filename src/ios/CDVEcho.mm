@@ -73,7 +73,7 @@
     _callbackParams = @[pluginResult, command.callbackId];
     
     //sound example
-    //[self set_sound_speed:speed.integerValue];
+    [self set_sound_speed:speed.integerValue];
     
     //haptic example
     [self set_haptic_speed:speed.integerValue];
