@@ -57,10 +57,12 @@
     dispatch_once (&once_token, ^{
         NSURL* s = [[NSBundle mainBundle] URLForResource:@"MoreCowbell" withExtension:@"caf"];
         sound_define(s, 'H', 1);
-        sound_define(s, 'L', 0.20);
+        sound_define(s, 'L', 0.3);
+        sound_define(s, 'N', 0);
+        sound_define(s, 'M', 0.5);
     });
     
-    sound_start(speed, @"HLHL");
+    sound_start(speed, @"HLMHLHL");
 }
 
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
