@@ -43,7 +43,7 @@
     haptic_start(speed, @"XlHlHll"); //balkan!
 }
 
-- (void)set_sound_speed:(NSInteger)speed {
+- (void)set_sound_speed:(NSInteger)speed:(NSString*)pattern {
 /*
     use sound_start and sound_stop to control the metronome 
     haptic_start takes speed (bpm) as integer and NSString* to define measure
@@ -62,11 +62,13 @@
         sound_define(s, 'M', 0.5);
     });
     
-    sound_start(speed, @"HLMHLHL");
+    // sound_start(speed, @"HLMHLHL");
+    sound_start(speed, pattern);
 }
 
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
     NSNumber *speed = [command.arguments objectAtIndex:0];
+    NSString *pattern = [command.arguments objectAtIndex:1];
     NSLog(@"speed: %@", speed);
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{}];
@@ -75,7 +77,7 @@
     _callbackParams = @[pluginResult, command.callbackId];
     
     //sound example
-    [self set_sound_speed:speed.integerValue];
+    [self set_sound_speed:speed.integerValue:pattern];
     
     //haptic example
     [self set_haptic_speed:speed.integerValue];
