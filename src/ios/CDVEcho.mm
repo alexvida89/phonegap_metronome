@@ -80,7 +80,7 @@
     [self set_sound_speed:speed.integerValue:pattern];
     
     //haptic example
-    [self set_haptic_speed:speed.integerValue];
+    // [self set_haptic_speed:speed.integerValue];
 }
 
 - (void)fire {
