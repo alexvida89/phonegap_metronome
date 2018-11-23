@@ -40,7 +40,7 @@
           -> (space) no sound
 */
 
-    // haptic_start(speed, @"XlHlHll"); //balkan!
+    haptic_start(speed, @"XlHlHll"); //balkan!
 }
 
 - (void)set_sound_speed:(NSInteger)speed:(NSString*)pattern {
