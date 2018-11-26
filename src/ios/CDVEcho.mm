@@ -58,6 +58,7 @@
         NSURL* s = [[NSBundle mainBundle] URLForResource:@"MoreCowbell" withExtension:@"caf"];
         sound_define(s, 'H', 1);
         sound_define(s, 'L', 0.3);
+        sound_define(s, 'S', 0.1);
         sound_define(s, 'N', 0);
         sound_define(s, 'M', 0.5);
     });
@@ -70,7 +71,8 @@
     NSNumber *speed = [command.arguments objectAtIndex:0];
     NSString *pattern = [command.arguments objectAtIndex:1];
     NSLog(@"speed: %@", speed);
-    
+    NSLog(@"pattern: %@", pattern);
+
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{}];
     [pluginResult setKeepCallbackAsBool:YES];
     
