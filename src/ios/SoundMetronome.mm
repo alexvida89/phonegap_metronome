@@ -1,6 +1,7 @@
 #import "SoundMetronome.h"
 #import <AVFoundation/AVFoundation.h>
 #include <map>
+#include <cmath>
 
 template<class T>
 static void reduce_volume(T*const* data, size_t channels, size_t stride, size_t frame_count, double factor) {
@@ -82,6 +83,12 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
 		return;
 		
 	_measure = measure;
+	if (_playing) {
+		double new_samples_per_beat = 60. / speed * _buffers.begin()->second.format.sampleRate;
+		_beat_count = ceil((_beat_count * _samples_per_beat) / new_samples_per_beat);
+		_samples_per_beat = new_samples_per_beat;
+		return;
+	}
 	_samples_per_beat = 60. / speed * _buffers.begin()->second.format.sampleRate;
 
 	[_engine disconnectNodeInput: _player];
@@ -146,7 +153,7 @@ void sound_define(NSURL* file, char symbol, double volume) {
 }
 
 void sound_start(int speed, NSString* measure) {
-	[m() stop];
+	// [m() stop];
 	[m() start:speed measure:measure];
 }
 
