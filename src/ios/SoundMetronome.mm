@@ -81,14 +81,16 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
 -(void)start:(int)speed measure:(NSString*)measure {
 	if (_buffers.empty())
 		return;
-		
+
 	_measure = measure;
+
 	if (_playing) {
 		double new_samples_per_beat = 60. / speed * _buffers.begin()->second.format.sampleRate;
 		_beat_count = ceil((_beat_count * _samples_per_beat) / new_samples_per_beat);
 		_samples_per_beat = new_samples_per_beat;
 		return;
 	}
+		
 	_samples_per_beat = 60. / speed * _buffers.begin()->second.format.sampleRate;
 
 	[_engine disconnectNodeInput: _player];
@@ -129,8 +131,8 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
 	AVAudioPCMBuffer* buffer = [self _current_buffer];
 	AVAudioTime* player_beat_time = [AVAudioTime timeWithSampleTime:_samples_per_beat * _beat_count atRate:_buffers.begin()->second.format.sampleRate];
 	[_player scheduleBuffer:buffer atTime:player_beat_time options:0 completionHandler:^{
-		dispatch_sync(_sync_queue, ^{
-			++_beat_count;
+		dispatch_sync(self->_sync_queue, ^{
+			++self->_beat_count;
 			[self _schedule_beat];
 		});
 	}];
@@ -153,7 +155,6 @@ void sound_define(NSURL* file, char symbol, double volume) {
 }
 
 void sound_start(int speed, NSString* measure) {
-	// [m() stop];
 	[m() start:speed measure:measure];
 }
 
