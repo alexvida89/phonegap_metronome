@@ -64,7 +64,7 @@
     });
     
     // sound_start(speed, @"HLMHLHL");
-    sound_start(speed, pattern.text);
+    sound_start(speed, pattern);
 }
 
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
