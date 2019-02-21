@@ -68,8 +68,8 @@
 }
 
 
-- (void)stopBeatSpeed:(CDVInvokedUrlCommand*)command {
-    [self sound_stop;
+- (void)stopBeatSpeed {
+    [self sound_stop];
 }
 
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
