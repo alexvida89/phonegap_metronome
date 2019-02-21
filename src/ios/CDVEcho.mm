@@ -68,7 +68,7 @@
 }
 
 
-- (void)stopBeatSpeed {
+- (void)stopBeatSpeed:(CDVInvokedUrlCommand*)command {
     [self sound_stop];
 }
 
