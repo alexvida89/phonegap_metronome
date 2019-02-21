@@ -68,16 +68,8 @@
 }
 
 
-- (void)stopBeatSpeed:(CDVInvokedUrlCommand*)command {
-    NSNumber *speed = [command.arguments objectAtIndex:0];
-    NSString *pattern = [command.arguments objectAtIndex:1];
-    
-    CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{}];
-    [pluginResult setKeepCallbackAsBool:YES];
-    
-    _callbackParams = @[pluginResult, command.callbackId];
-
-    [self sound_stop];
+- (void)stopBeatSpeed{
+    sound_stop();
 }
 
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
