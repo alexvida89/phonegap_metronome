@@ -67,6 +67,11 @@
     sound_start(speed, pattern);
 }
 
+
+- (void)stopBeatSpeed:(CDVInvokedUrlCommand*)command {
+    [self sound_stop;
+}
+
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
     NSNumber *speed = [command.arguments objectAtIndex:0];
     NSString *pattern = [command.arguments objectAtIndex:1];
