@@ -10,5 +10,4 @@ module.exports = function setBeat(speed, pattern, callback) {
 };
 module.exports = function stop(callback) {
     exec(callback, callback, 'Echo', 'stopBeatSpeed');
-    // exec(callback, callback, 'Echo', 'sound_start ', [speed]);
 };
