@@ -69,15 +69,15 @@
 
 
 - (void)stopBeatSpeed{
-    sound_start(220, @"H");
+    // sound_start(220, @"H");
     // sound_stop();
 }
 
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
     NSNumber *speed = [command.arguments objectAtIndex:0];
     NSString *pattern = [command.arguments objectAtIndex:1];
-    // NSLog(@"speed: %@", speed);
-    // NSLog(@"pattern: %@", pattern);
+    NSLog(@"speed: %@", speed);
+    NSLog(@"pattern: %@", pattern);
 
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:@{}];
     [pluginResult setKeepCallbackAsBool:YES];
@@ -88,7 +88,7 @@
     [self set_sound_speed:speed.integerValue:pattern];
     
     //haptic example
-    [self set_haptic_speed:speed.integerValue];
+    // [self set_haptic_speed:speed.integerValue];
 }
 
 - (void)fire {
