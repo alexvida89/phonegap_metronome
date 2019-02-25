@@ -40,6 +40,7 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
     NSString* _measure;
     bool _playing, _player_started;
     int32_t _beat_count, _samples_per_beat; 
+    int64_t _audio_offset;
 }
 -(instancetype)init;
 -(void)dealloc;
@@ -82,16 +83,19 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
 	if (_buffers.empty())
 		return;
 
-	_measure = measure;
-
 	if (_playing) {
-		double new_samples_per_beat = 60. / speed * _buffers.begin()->second.format.sampleRate;
-		_beat_count = ceil((_beat_count * _samples_per_beat) / new_samples_per_beat);
-		_samples_per_beat = new_samples_per_beat;
+		_audio_offset += _beat_count * _samples_per_beat;
+		_samples_per_beat = 60. / speed * _buffers.begin()->second.format.sampleRate;
+		_beat_count = [_measure isEqualToString:measure] ? _beat_count % [_measure length] : 0;
+		_audio_offset -= _beat_count * _samples_per_beat;
+		_measure = measure;		
 		return;
 	}
-		
+
+	_audio_offset = 0;
 	_samples_per_beat = 60. / speed * _buffers.begin()->second.format.sampleRate;
+	_measure = measure;
+	_beat_count = 0;
 
 	[_engine disconnectNodeInput: _player];
 	[_engine connect:_player to:_engine.outputNode fromBus:0 toBus:0 format:_buffers.begin()->second.format];
@@ -99,7 +103,6 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
 	if (![_engine startAndReturnError:nil]) 
 		return;
 
-	_beat_count = 0;
 	_playing = true;
 	
 	dispatch_sync(_sync_queue, ^{
@@ -129,7 +132,7 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
 		return;
 
 	AVAudioPCMBuffer* buffer = [self _current_buffer];
-	AVAudioTime* player_beat_time = [AVAudioTime timeWithSampleTime:_samples_per_beat * _beat_count atRate:_buffers.begin()->second.format.sampleRate];
+	AVAudioTime* player_beat_time = [AVAudioTime timeWithSampleTime:_samples_per_beat * _beat_count + _audio_offset atRate:_buffers.begin()->second.format.sampleRate];
 	[_player scheduleBuffer:buffer atTime:player_beat_time options:0 completionHandler:^{
 		dispatch_sync(self->_sync_queue, ^{
 			++self->_beat_count;
@@ -155,7 +158,6 @@ void sound_define(NSURL* file, char symbol, double volume) {
 }
 
 void sound_start(int speed, NSString* measure) {
-	// [m() stop];
 	[m() start:speed measure:measure];
 }
 
