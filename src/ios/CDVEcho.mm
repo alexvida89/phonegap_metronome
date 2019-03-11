@@ -68,7 +68,7 @@
 }
 
 
-- (void)stopBeatSpeed{
+- (void)stopBeatSpeed:(CDVInvokedUrlCommand*)command {
     // sound_start(220, @"H");
     sound_stop();
 }
