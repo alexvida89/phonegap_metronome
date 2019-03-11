@@ -70,7 +70,7 @@
 
 - (void)stopBeatSpeed{
     // sound_start(220, @"H");
-    // sound_stop();
+    sound_stop();
 }
 
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
