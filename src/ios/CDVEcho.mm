@@ -60,18 +60,18 @@
         sound_define(s, 'L', 0.3);
         sound_define(s, 'S', 0.1);
         sound_define(s, 'N', 0);
+        sound_define(s, 'X', 0);
         sound_define(s, 'M', 0.5);
     });
     
     // sound_start(speed, @"HLMHLHL");
-    sound_start(speed, pattern);
+    if([pattern isEqualToString:@"X"]){
+        sound_stop();
+    } else{
+        sound_start(speed, pattern);
+    }
 }
 
-
-- (void)stopBeatSpeed:(CDVInvokedUrlCommand*)command {
-    // sound_start(220, @"H");
-    sound_stop();
-}
 
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
     NSNumber *speed = [command.arguments objectAtIndex:0];
