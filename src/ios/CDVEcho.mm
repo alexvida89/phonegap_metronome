@@ -69,6 +69,7 @@
         sound_stop();
     } else{
         sound_start(speed, pattern);
+        haptic();
     }
 }
 

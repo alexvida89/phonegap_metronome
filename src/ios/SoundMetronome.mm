@@ -1,5 +1,6 @@
 #import "SoundMetronome.h"
 #import <AVFoundation/AVFoundation.h>
+#import <UIKit/UIKit.h>
 #include <map>
 #include <cmath>
 
@@ -41,12 +42,14 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
     bool _playing, _player_started;
     int32_t _beat_count, _samples_per_beat; 
     int64_t _audio_offset;
+	UISelectionFeedbackGenerator* _haptic;    
 }
 -(instancetype)init;
 -(void)dealloc;
 -(void)define_sound:(NSURL*)file_url symbol:(char)symbol volume:(double)volume;
 -(void)start:(int)speed measure:(NSString*)measure;
 -(void)stop;
+-(void)haptic;
 
 -(void)_schedule_beat;
 -(AVAudioPCMBuffer*)_current_buffer;
@@ -63,6 +66,7 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
 	_player = [[AVAudioPlayerNode alloc] init];
 	[_engine attachNode: _player];
 	_sync_queue = dispatch_queue_create("SoundMetronome", DISPATCH_QUEUE_SERIAL);
+	_haptic = [[UISelectionFeedbackGenerator alloc] init];
 	return self;
 }
 
@@ -146,6 +150,10 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
 	}		
 }
 
+-(void)haptic {
+	[_haptic selectionChanged];
+}
+
 @end
 
 static SoundMetronome* m() {
@@ -163,4 +171,8 @@ void sound_start(int speed, NSString* measure) {
 
 void sound_stop() {
 	[m() stop];
+}
+
+void haptic() {
+	[m() haptic];
 }
