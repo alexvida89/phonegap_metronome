@@ -146,7 +146,6 @@ static AVAudioPCMBuffer* load_audio_buffer(NSURL* file_url, double volume = 1.0)
 	
 	if (!_player_started) {
 		[_player play];
-		haptic();
 		_player_started = true;
 	}		
 }
