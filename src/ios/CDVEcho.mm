@@ -73,7 +73,9 @@
     }
 }
 
-
+- (void)setHaptic:(CDVInvokedUrlCommand*)command {
+        haptic();
+}
 - (void)setBeatSpeed:(CDVInvokedUrlCommand*)command {
     NSNumber *speed = [command.arguments objectAtIndex:0];
     NSString *pattern = [command.arguments objectAtIndex:1];

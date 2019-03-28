@@ -8,6 +8,6 @@ module.exports = function setBeat(speed, pattern, callback) {
     exec(callback, callback, 'Echo', 'setBeatSpeed', [speed,pattern]);
     // exec(callback, callback, 'Echo', 'sound_start ', [speed]);
 };
-// module.exports = function stop(speed, pattern, callback) {
-//     exec(callback, callback, 'Echo', 'stopBeatSpeed', [speed,pattern]);
-// };
+module.exports = function setHaptic(callback) {
+    exec(callback, callback, 'Echo', 'setHaptic');
+};
