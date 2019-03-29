@@ -8,17 +8,23 @@ var exec = cordova.require('cordova/exec'),
 //     exec(callback, callback, 'Echo', 'setBeatSpeed', [speed,pattern]);
 //     // exec(callback, callback, 'Echo', 'sound_start ', [speed]);
 // };
-// module.exports = function setHaptic(callback) {
+
+
+
+// var myPlugin = function () {
+// }
+// myPlugin.setBeat = function(speed, pattern, callback) {
+//     exec(callback, callback, 'Echo', 'setBeatSpeed', [speed,pattern]);
+// }
+// myPlugin.setHaptic = function(callback) {
 //     exec(callback, callback, 'Echo', 'setHaptic');
-// };
+// }
+// module.exports = myPlugin;
 
 
-var myPlugin = function () {
-}
-myPlugin.setBeat = function(speed, pattern, callback) {
+module.exports.setBeat = function(speed, pattern, callback) { 
     exec(callback, callback, 'Echo', 'setBeatSpeed', [speed,pattern]);
-}
-myPlugin.setHaptic = function(callback) {
+};
+module.exports.setHaptic = function(callback) { 
     exec(callback, callback, 'Echo', 'setHaptic');
-}
-module.exports = myPlugin;
+};
