@@ -67,7 +67,9 @@
     // sound_start(speed, @"HLMHLHL");
     if([pattern isEqualToString:@"X"]){
         sound_stop();
-    } else{
+    } else if ([pattern isEqualToString:@"Z"]){
+        haptic();
+    }else{
         sound_start(speed, pattern);
         haptic();
     }
