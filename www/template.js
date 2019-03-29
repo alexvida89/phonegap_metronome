@@ -10,21 +10,21 @@ var exec = cordova.require('cordova/exec'),
 // };
 
 
-
-// var myPlugin = function () {
-// }
-// myPlugin.setBeat = function(speed, pattern, callback) {
-//     exec(callback, callback, 'Echo', 'setBeatSpeed', [speed,pattern]);
-// }
-// myPlugin.setHaptic = function(callback) {
-//     exec(callback, callback, 'Echo', 'setHaptic');
-// }
-// module.exports = myPlugin;
-
-
-module.exports.setBeat = function(speed, pattern, callback) { 
+var myPlugin = function () {
+}
+myPlugin.prototype.setBeat = function(speed, pattern, callback) {
     exec(callback, callback, 'Echo', 'setBeatSpeed', [speed,pattern]);
-};
-module.exports.setHaptic = function(callback) { 
+}
+myPlugin.prototype.setHaptic = function(callback) {
     exec(callback, callback, 'Echo', 'setHaptic');
-};
+}
+var myplugin_final = myPlugin;
+module.exports = myplugin_final;
+
+
+// module.exports.setBeat = function(speed, pattern, callback) { 
+//     exec(callback, callback, 'Echo', 'setBeatSpeed', [speed,pattern]);
+// };
+// module.exports.setHaptic = function(callback) { 
+//     exec(callback, callback, 'Echo', 'setHaptic');
+// };
