@@ -21,4 +21,4 @@ myPlugin.setBeat = function(speed, pattern, callback) {
 myPlugin.setHaptic = function(callback) {
     exec(callback, callback, 'Echo', 'setHaptic');
 }
-modules.exports = myPlugin;
+module.exports = myPlugin;
