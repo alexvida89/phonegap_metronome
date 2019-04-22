@@ -62,11 +62,12 @@
         sound_define(s, 'N', 0);
         sound_define(s, 'X', 0);
         sound_define(s, 'M', 0.5);
-        // NSURL* s1 = [[NSBundle mainBundle] URLForResource:@"MoreCowbell" withExtension:@"caf"];
-        // sound_define(s1, 'a', 1);
-        // sound_define(s1, 'b', 0.5);
-        // sound_define(s1, 'c', 0.3);
-        // sound_define(s1, 'd', 0.1);
+
+        NSURL* s1 = [[NSBundle mainBundle] URLForResource:@"Woodblock-Low" withExtension:@"caf"];
+        sound_define(s1, 'a', 1);
+        sound_define(s1, 'b', 0.5);
+        sound_define(s1, 'c', 0.3);
+        sound_define(s1, 'd', 0.1);
 
         // sound_define(s1, 'N', 0);
         // sound_define(s1, 'X', 0);
