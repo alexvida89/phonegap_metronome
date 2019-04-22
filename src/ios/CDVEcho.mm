@@ -63,7 +63,7 @@
         sound_define(s, 'X', 0);
         sound_define(s, 'M', 0.5);
 
-        NSURL* s1 = [[NSBundle mainBundle] URLForResource:@"Woodblock-Low" withExtension:@"caf"];
+        NSURL* s1 = [[NSBundle mainBundle] URLForResource:@"MoreCowbell" withExtension:@"caf"];
         sound_define(s1, 'a', 1);
         sound_define(s1, 'b', 0.5);
         sound_define(s1, 'c', 0.3);
