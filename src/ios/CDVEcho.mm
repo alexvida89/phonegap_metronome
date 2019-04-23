@@ -55,40 +55,40 @@
     //the following block executes sound_define calls once
     static dispatch_once_t once_token;
     dispatch_once (&once_token, ^{
-        // NSURL* s = [[NSBundle mainBundle] URLForResource:@"Cowbell" withExtension:@"caf"];
-        // sound_define(s, 'H', 1);
-        // sound_define(s, 'L', 0.3);
-        // sound_define(s, 'S', 0.1);
-        // sound_define(s, 'N', 0);
-        // sound_define(s, 'X', 0);
-        // sound_define(s, 'M', 0.5);
+        NSURL* s = [[NSBundle mainBundle] URLForResource:@"Cowbell" withExtension:@"caf"];
+        sound_define(s, 'H', 1);
+        sound_define(s, 'L', 0.3);
+        sound_define(s, 'S', 0.1);
+        sound_define(s, 'N', 0);
+        sound_define(s, 'X', 0);
+        sound_define(s, 'M', 0.5);
 
-        NSURL* s1 = [[NSBundle mainBundle] URLForResource:@"Cowbell" withExtension:@"caf"];
-        sound_define(s1, 'a', 1);
-        sound_define(s1, 'b', 0.5);
-        sound_define(s1, 'c', 0.3);
-        sound_define(s1, 'd', 0.1);
+        // NSURL* s1 = [[NSBundle mainBundle] URLForResource:@"Cowbell" withExtension:@"caf"];
+        // sound_define(s1, 'a', 1);
+        // sound_define(s1, 'b', 0.5);
+        // sound_define(s1, 'c', 0.3);
+        // sound_define(s1, 'd', 0.1);
 
-        sound_define(s1, 'N', 0);
-        sound_define(s1, 'X', 0);
+        // sound_define(s1, 'N', 0);
+        // sound_define(s1, 'X', 0);
 
-        NSURL* s2 = [[NSBundle mainBundle] URLForResource:@"Woodblock-High" withExtension:@"caf"];
-        sound_define(s2, 'e', 1);
-        sound_define(s2, 'f', 0.5);
-        sound_define(s2, 'g', 0.3);
-        sound_define(s2, 'h', 0.1);
+        // NSURL* s2 = [[NSBundle mainBundle] URLForResource:@"Woodblock-High" withExtension:@"caf"];
+        // sound_define(s2, 'e', 1);
+        // sound_define(s2, 'f', 0.5);
+        // sound_define(s2, 'g', 0.3);
+        // sound_define(s2, 'h', 0.1);
 
-        NSURL* s3 = [[NSBundle mainBundle] URLForResource:@"Woodblock-Low" withExtension:@"caf"];
-        sound_define(s3, 'i', 1);
-        sound_define(s3, 'j', 0.5);
-        sound_define(s3, 'k', 0.3);
-        sound_define(s3, 'l', 0.1);
+        // NSURL* s3 = [[NSBundle mainBundle] URLForResource:@"Woodblock-Low" withExtension:@"caf"];
+        // sound_define(s3, 'i', 1);
+        // sound_define(s3, 'j', 0.5);
+        // sound_define(s3, 'k', 0.3);
+        // sound_define(s3, 'l', 0.1);
 
-        NSURL* s4 = [[NSBundle mainBundle] URLForResource:@"Woodblock-Mid" withExtension:@"caf"];
-        sound_define(s4, 'm', 1);
-        sound_define(s4, 'n', 0.5);
-        sound_define(s4, 'o', 0.3);
-        sound_define(s4, 'p', 0.1);
+        // NSURL* s4 = [[NSBundle mainBundle] URLForResource:@"Woodblock-Mid" withExtension:@"caf"];
+        // sound_define(s4, 'm', 1);
+        // sound_define(s4, 'n', 0.5);
+        // sound_define(s4, 'o', 0.3);
+        // sound_define(s4, 'p', 0.1);
         
     });
     
