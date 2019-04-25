@@ -36,10 +36,10 @@
         <source-file src="src/ios/HapticMetronome.mm" />
         <header-file src="src/ios/Metronome.h" />
         <source-file src="src/ios/Metronome.m" />
-        <resource-file src="src/ios/Cowbell.caf" />
-        <resource-file src="src/ios/WoodblockHigh.caf" />
-        <resource-file src="src/ios/WoodblockLow.caf" />
-        <resource-file src="src/ios/WoodblockMid.caf" />
+        <resource-file src="src/ios/HQCowbell.caf" />
+        <resource-file src="src/ios/HQWoodblockHigh.caf" />
+        <resource-file src="src/ios/HQWoodblockLow.caf" />
+        <resource-file src="src/ios/HQWoodblockMid.caf" />
         <header-file src="src/ios/SoundMetronome.h" />
         <source-file src="src/ios/SoundMetronome.mm" />
 
