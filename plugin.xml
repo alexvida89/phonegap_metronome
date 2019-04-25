@@ -36,7 +36,7 @@
         <source-file src="src/ios/HapticMetronome.mm" />
         <header-file src="src/ios/Metronome.h" />
         <source-file src="src/ios/Metronome.m" />
-        <resource-file src="src/ios/MoreCowbell.caf" />
+        <resource-file src="src/ios/WoodblockMid.caf" />
         <header-file src="src/ios/SoundMetronome.h" />
         <source-file src="src/ios/SoundMetronome.mm" />
 
