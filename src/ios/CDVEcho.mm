@@ -55,7 +55,7 @@
     //the following block executes sound_define calls once
     static dispatch_once_t once_token;
     dispatch_once (&once_token, ^{
-        NSURL* s = [[NSBundle mainBundle] URLForResource:@"MoreCowbell-low" withExtension:@"caf"];
+        NSURL* s = [[NSBundle mainBundle] URLForResource:@"MoreCowbelllow" withExtension:@"caf"];
         sound_define(s, 'H', 1);
         sound_define(s, 'L', 0.3);
         sound_define(s, 'S', 0.1);
