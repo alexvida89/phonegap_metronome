@@ -63,13 +63,13 @@
         // sound_define(s, 'X', 0);
         // sound_define(s, 'M', 0.5);
 
-        NSURL* s1 = [[NSBundle mainBundle] URLForResource:@"HQCowbell" withExtension:@"caf"];
+        /* NSURL* s1 = [[NSBundle mainBundle] URLForResource:@"HQCowbell" withExtension:@"caf"];
         sound_define(s1, 'a', 1);
         sound_define(s1, 'b', 0.5);
         sound_define(s1, 'c', 0.3);
         sound_define(s1, 'd', 0.1);
         sound_define(s1, 'A', 0);
-        // sound_define(s1, 'X', 0);
+        // sound_define(s1, 'X', 0); */
 
         NSURL* s2 = [[NSBundle mainBundle] URLForResource:@"HQWoodblockHigh" withExtension:@"caf"];
         sound_define(s2, 'e', 1);
