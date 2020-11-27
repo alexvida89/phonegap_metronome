@@ -35,6 +35,7 @@ public class SoundMetronome implements Metronome {
 
     private final LooperThread looperThread;
 
+    private final Pattern measurePattern = Pattern.compile("([^XefghEijklImnopM])");
 
     public SoundMetronome(Resources resources, String packageName) {
         this.notes = new HashMap<>();
@@ -49,13 +50,21 @@ public class SoundMetronome implements Metronome {
     }
 
     @Override
-    public void start(int bpm, String measure) {
+    public void start(int bpm, String measure) throws IllegalArgumentException {
 
         if (measure.length() == 0) {
-            Exception e = new Exception("the measure cannot be empty");
-            Log.e(TAG, e.getMessage(), e);
-            return;
+            throw new IllegalArgumentException("measure cannot be empty");
         }
+
+        if (bpm == 0) {
+            throw new IllegalArgumentException("bpm cannot be zero");
+        }
+
+        Matcher m = measurePattern.matcher(measure);
+        if (m.matches()) {
+            throw new IllegalArgumentException(String.format("measure entry '%s' is invalid", m.group(0)));
+        }
+
 
         if (measure.equals("X")) {
             stop();
