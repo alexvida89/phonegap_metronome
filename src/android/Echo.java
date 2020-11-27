@@ -36,11 +36,20 @@ public class Echo extends CordovaPlugin {
         if (action.equals("setBeatSpeed")) {
             int speed = args.getInt(0);
             String measure = args.getString(1);
-            metronome.start(speed, measure);
-            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
+            PluginResult result = setBeatSpeed(speed, measure);
+            callbackContext.sendPluginResult(result);
         } else {
             return false;
         }
         return true;
+    }
+
+    private PluginResult setBeatSpeed(int speed, String measure) {
+        try {
+            metronome.start(speed, measure);
+            return new PluginResult(PluginResult.Status.OK);
+        } catch (IllegalArgumentException ex) {
+            return new PluginResult(PluginResult.Status.ERROR, ex.getMessage());
+        }
     }
 }
