@@ -57,6 +57,11 @@ public class SoundMetronome implements Metronome {
             return;
         }
 
+        if (measure.equals("X")) {
+            stop();
+            return;
+        }
+
         Log.d(TAG, String.format("starting metronome with '%s', at: %d BPM", measure, bpm));
         if (notes.isEmpty()) {
             return; // no sounds do nothing

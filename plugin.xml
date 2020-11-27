@@ -6,7 +6,7 @@
     <name>MetronomePlugin</name>
 
     <js-module src="www/metronome.js" name="MetronomePlugin">
-        <clobbers target="cordova.plugins.MetronomePlugin" />
+        <clobbers target="cordova.plugins.MetronomePlugin.setBeat" />
     </js-module>
 
     <platform name="android">
@@ -46,4 +46,9 @@
         <source-file src="src/ios/SoundMetronome.mm" />
     </platform>
 
+    <platform name="browser">
+        <js-module src="www/metronome.js" name="MetronomePlugin">
+            <runs />
+        </js-module>
+    </platform>
 </plugin>

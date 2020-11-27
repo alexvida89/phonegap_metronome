@@ -1,10 +1,7 @@
 /* global cordova:false */
-/* globals window */
+/* global module:false */
 
-var MetronomePlugin = {};
-
-MetronomePlugin.prototype.setBeat = function setBeat(speed, pattern, callback) {
+module.exports = function setBeat(speed, pattern, callback) {
+    console.log('metronome.setBeat', speed, pattern);
     cordova.exec(callback, callback, 'Echo', 'setBeatSpeed', [speed, pattern]);
 };
-
-module.exports = MetronomePlugin;
