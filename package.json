@@ -22,8 +22,8 @@
         "ecosystem:cordova",
         "ecosystem:phonegap"
     ],
-    "engines":{
-        "cordova" : ">=3.0.0"
+    "engines": {
+        "cordova": ">=3.0.0"
     },
     "author": "",
     "license": "MIT",

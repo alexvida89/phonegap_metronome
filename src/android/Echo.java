@@ -1,8 +1,10 @@
 
-package org.apache.cordova.test;
+package cordova.plugins.MetronomePlugin;
 
+import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
+import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.PluginResult;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -15,8 +17,13 @@ import android.util.Base64;
 */
 public class Echo extends CordovaPlugin {
 
+    private Metronome metronome;
 
-     private volatile boolean bulkEchoing;
+
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+        super.initialize(cordova, webView);
+        metronome = new SoundMetronome(cordova.getActivity());
+    }
 
      /**
      * Executes the request and returns PluginResult.
@@ -27,14 +34,11 @@ public class Echo extends CordovaPlugin {
      */
     @SuppressLint("NewApi")
     public boolean execute(String action, final JSONArray args, final CallbackContext callbackContext) throws JSONException {
-        if (action.equals("echo")) {
-            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK, args.getString(0)));
-        } else if(action.equals("echoAsync")) {
-            cordova.getThreadPool().execute(new Runnable() {
-                public void run() {
-                    callbackContext.sendPluginResult( new PluginResult(PluginResult.Status.OK, args.optString(0)));
-                }
-            });
+        if (action.equals("setBeatSpeed")) {
+            int speed = args.getInt(0);
+            String measure = args.getString(1);
+            metronome.start(speed, measure);
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK);
         } else {
             return false;
         }
