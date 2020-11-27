@@ -1,4 +1,4 @@
-package cordova.plugins.MetronomePlugin;
+package org.cordova.plugins.metronome;
 
 import android.media.AudioFormat;
 

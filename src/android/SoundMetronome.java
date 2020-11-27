@@ -1,6 +1,6 @@
-package cordova.plugins.MetronomePlugin;
+package org.cordova.plugins.metronome;
 
-import android.content.Context;
+import android.content.res.Resources;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
@@ -22,7 +22,8 @@ public class SoundMetronome implements Metronome {
 
     private static final String TAG = Metronome.class.getCanonicalName();
 
-    private final Context context;
+    private final Resources resources;
+    private final String packageName;
 
     private String measure;
     private int bpm;
@@ -35,9 +36,10 @@ public class SoundMetronome implements Metronome {
     private final LooperThread looperThread;
 
 
-    public SoundMetronome(Context context) throws IOException {
+    public SoundMetronome(Resources resources, String packageName) {
         this.notes = new HashMap<>();
-        this.context = context;
+        this.resources = resources;
+        this.packageName = packageName;
         this.isPlaying = false;
         this.measure = "";
         this.looperThread = new LooperThread();
@@ -114,30 +116,34 @@ public class SoundMetronome implements Metronome {
         return bufferSize;
     }
 
-    private void defineSounds() throws IOException {
+    private void defineSounds() {
 
         if (!notes.isEmpty()) return; // need to be execute only one time
 
-        short[] high = resourceToBuffer(R.raw.hq_woodblock_high);
-        defineSound('e', high, 1.0f);
-        defineSound('f', high, 0.5f);
-        defineSound('g', high, 0.3f);
-        defineSound('h', high, 0.1f);
-        defineSound('E', high, 0f);
+        try {
+            short[] high = resourceToBuffer(resolveResourceId("raw", "hq_woodblock_high"));
+            defineSound('e', high, 1.0f);
+            defineSound('f', high, 0.5f);
+            defineSound('g', high, 0.3f);
+            defineSound('h', high, 0.1f);
+            defineSound('E', high, 0f);
 
-        short[] mid = resourceToBuffer(R.raw.hq_woodblock_mid);
-        defineSound('i', mid, 1.0f);
-        defineSound('j', mid, 0.5f);
-        defineSound('k', mid, 0.3f);
-        defineSound('l', mid, 0.1f);
-        defineSound('I', mid, 0f);
+            short[] mid = resourceToBuffer(resolveResourceId("raw", "hq_woodblock_mid"));
+            defineSound('i', mid, 1.0f);
+            defineSound('j', mid, 0.5f);
+            defineSound('k', mid, 0.3f);
+            defineSound('l', mid, 0.1f);
+            defineSound('I', mid, 0f);
 
-        short[] low = resourceToBuffer(R.raw.hq_woodblock_low);
-        defineSound('m', low, 1.0f);
-        defineSound('n', low, 0.5f);
-        defineSound('o', low, 0.3f);
-        defineSound('p', low, 0.1f);
-        defineSound('M', low, 0f);
+            short[] low = resourceToBuffer(resolveResourceId("raw", "hq_woodblock_low"));
+            defineSound('m', low, 1.0f);
+            defineSound('n', low, 0.5f);
+            defineSound('o', low, 0.3f);
+            defineSound('p', low, 0.1f);
+            defineSound('M', low, 0f);
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
     }
 
     private AudioTrack buildAudioTrack(int bufferSize) {
@@ -171,12 +177,16 @@ public class SoundMetronome implements Metronome {
         notes.put(symbol, new MetronomeNote(symbol, buffer, volume));
     }
 
+    private int resolveResourceId(String resourceType, String resourceName) {
+        return resources.getIdentifier(resourceName, resourceType, packageName);
+    }
+
     private short[] resourceToBuffer(int resId) throws IOException {
         int bufferSize = 512;
         byte[] buffer = new byte[bufferSize];
 
         Log.d(TAG, String.format("resource (%d) to buffer", resId));
-        InputStream inputStream = context.getResources().openRawResource(resId);
+        InputStream inputStream = resources.openRawResource(resId);
         BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 

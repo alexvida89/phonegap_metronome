@@ -1,5 +1,4 @@
-
-package cordova.plugins.MetronomePlugin;
+package org.cordova.plugins.metronome;
 
 import org.apache.cordova.CordovaWebView;
 import org.apache.cordova.CallbackContext;
@@ -22,7 +21,7 @@ public class Echo extends CordovaPlugin {
 
     public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.initialize(cordova, webView);
-        metronome = new SoundMetronome(cordova.getActivity());
+        metronome = new SoundMetronome(cordova.getActivity().getResources(), cordova.getActivity().getPackageName());
     }
 
      /**
@@ -38,7 +37,7 @@ public class Echo extends CordovaPlugin {
             int speed = args.getInt(0);
             String measure = args.getString(1);
             metronome.start(speed, measure);
-            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK);
+            callbackContext.sendPluginResult(new PluginResult(PluginResult.Status.OK));
         } else {
             return false;
         }
