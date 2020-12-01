@@ -116,6 +116,7 @@ public class SoundMetronome implements Metronome {
             audioTrack.write(note.buffer, 0, note.buffer.length);
             audioTrack.setPlaybackRate(Constants.SAMPLE_RATE);
             audioTrack.play();
+            audioTrack.release();
             Log.d(TAG, String.format(
                 "Note %s, was played at %.1f vol. buffer length: %d",
                 note.symbol, note.volume, note.buffer.length));
