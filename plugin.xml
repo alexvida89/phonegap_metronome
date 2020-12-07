@@ -6,7 +6,7 @@
     <name>MetronomePlugin</name>
 
     <js-module src="www/metronome.js" name="MetronomePlugin">
-        <clobbers target="cordova.plugins.MetronomePlugin.setBeat" />
+        <clobbers target="cordova.plugins.MetronomePlugin" />
     </js-module>
 
     <platform name="android">
@@ -22,10 +22,11 @@
         <source-file src="src/android/Metronome.java" target-dir="src/org/cordova/plugins/metronome"/>
         <source-file src="src/android/SoundMetronome.java" target-dir="src/org/cordova/plugins/metronome"/>
         <source-file src="src/android/MetronomeNote.java" target-dir="src/org/cordova/plugins/metronome"/>
+        <source-file src="src/android/ToneGenerator" target-dir="src/org/cordova/plugins/metronome"/>
 
-        <resource-file src="src/android/res/raw/hq_woodblock_high.raw" target="res/raw/hq_woodblock_high.raw" />
-        <resource-file src="src/android/res/raw/hq_woodblock_mid.raw" target="res/raw/hq_woodblock_mid.raw" />
-        <resource-file src="src/android/res/raw/hq_woodblock_low.raw" target="res/raw/hq_woodblock_low.raw" />
+        <resource-file src="src/android/res/raw/hq_woodblock_high_ogg.ogg" target="res/raw/hq_woodblock_high_ogg.ogg" />
+        <resource-file src="src/android/res/raw/hq_woodblock_mid_ogg.ogg" target="res/raw/hq_woodblock_mid_ogg.ogg" />
+        <resource-file src="src/android/res/raw/hq_woodblock_low_ogg.ogg" target="res/raw/hq_woodblock_low_ogg.ogg" />
     </platform>
 
     <platform name="ios">
