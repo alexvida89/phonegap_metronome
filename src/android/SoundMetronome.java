@@ -74,14 +74,13 @@ public class SoundMetronome implements Metronome {
 
         Log.d(TAG, String.format("starting metronome with '%s', at: %d BPM", measure, bpm));
 
-        this.bpm = bpm;
-
         if (isPlaying) {
             beatCount = measure.equals(this.measure) ? beatCount % this.measure.length() : 0;
             return;
         }
 
         this.measure = measure;
+        this.bpm = bpm / this.measure.length();
         beatCount = 0;
 
         isPlaying = true;
