@@ -1,23 +1,31 @@
 package org.cordova.plugins.metronome;
 
 import android.content.Context;
+import android.content.res.AssetFileDescriptor;
 import android.content.res.Resources;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
+import android.media.MediaExtractor;
+import android.media.MediaFormat;
 import android.media.SoundPool;
 import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Vibrator;
 import android.util.Log;
+import android.view.HapticFeedbackConstants;
 
 import androidx.annotation.RequiresApi;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class SoundMetronome implements Metronome {
+public class SoundMetronome implements Metronome, HapticFeedback, Runnable {
 
     private static final String TAG = Metronome.class.getCanonicalName();
 
+    private final Vibrator vibrator;
     private final Context context;
     private final Resources resources;
     private final String packageName;
@@ -30,6 +38,8 @@ public class SoundMetronome implements Metronome {
 
     private int beatCount;
 
+    private long delayDiff = 1000;
+
     private final Handler handler;
 
     private final SoundPool soundPool;
@@ -39,6 +49,7 @@ public class SoundMetronome implements Metronome {
         this.context = context;
         this.resources = context.getResources();
         this.packageName = context.getPackageName();
+        this.vibrator = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
 
         this.notes = new HashMap<>();
         this.isPlaying = false;
@@ -52,6 +63,7 @@ public class SoundMetronome implements Metronome {
         this.handler = new Handler(Looper.myLooper());
 
         defineSounds();
+        calculateDelayDiff();
     }
 
     @Override
@@ -68,6 +80,11 @@ public class SoundMetronome implements Metronome {
             return;
         }
 
+        if (measure.equals("Z")) {
+            haptic();
+            return;
+        }
+
         if (notes.isEmpty()) {
             return; // no sounds do nothing
         }
@@ -76,16 +93,18 @@ public class SoundMetronome implements Metronome {
 
         if (isPlaying) {
             beatCount = measure.equals(this.measure) ? beatCount % this.measure.length() : 0;
-            return;
+            this.measure = measure;
+            this.bpm = bpm;
+        } else {
+            beatCount = 0;
+            this.measure = measure;
+            this.bpm = bpm;
+
+            isPlaying = true;
+
+            run();
         }
-
-        this.measure = measure;
-        this.bpm = bpm / this.measure.length();
-        beatCount = 0;
-
-        isPlaying = true;
-
-        scheduleBeat();
+        haptic();
     }
 
     @Override
@@ -99,11 +118,16 @@ public class SoundMetronome implements Metronome {
         return isPlaying;
     }
 
+    @Override
+    public void haptic() {
+        vibrator.vibrate(HapticFeedbackConstants.CONFIRM);
+    }
+
     private void playSingleNote(MetronomeNote note) {
-        soundPool.play(note.soundId, note.volume, note.volume, 0, 0, 1.0f);
+        soundPool.play(note.soundId, note.volume, note.volume, 1, 0, 1.0f);
         Log.d(TAG, String.format(
-            "Note %s, was played at %.1f vol. sound: %d",
-            note.symbol, note.volume, note.soundId));
+            "Note %s, was played at %.1f vol. sound: %d, beatCount: %s",
+            note.symbol, note.volume, note.soundId, beatCount));
     }
 
     private void defineSounds() {
@@ -132,6 +156,19 @@ public class SoundMetronome implements Metronome {
         defineSound('M', lowId, 0f);
     }
 
+    private void calculateDelayDiff() {
+        long start = System.currentTimeMillis();
+        playSingleNote(notes.get('E'));
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                long end = System.currentTimeMillis();
+                delayDiff = end - start;
+                Log.d(TAG, String.format("System delay diff: %s", delayDiff));
+            }
+        }, 1000L);
+    }
+
     private SoundPool buildSoundPool() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             return buildSoundPoolNew();
@@ -146,6 +183,7 @@ public class SoundMetronome implements Metronome {
             .setMaxStreams(1)
             .setAudioAttributes(new AudioAttributes.Builder()
                 .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+                .setUsage(AudioAttributes.USAGE_MEDIA)
                 .build())
             .build();
     }
@@ -156,8 +194,24 @@ public class SoundMetronome implements Metronome {
     }
 
     private void defineSound(Character symbol, int resId, float volume) {
-        int soundId = soundPool.load(context, resId, 0);
-        notes.put(symbol, new MetronomeNote(symbol, soundId, volume));
+        try {
+            AssetFileDescriptor fd = resources.openRawResourceFd(resId);
+            MediaExtractor me = new MediaExtractor();
+            me.setDataSource(fd.getFileDescriptor(), fd.getStartOffset(), fd.getLength());
+
+            MediaFormat mf = me.getTrackFormat(0);
+            int bitRate = mf.getInteger(MediaFormat.KEY_BIT_RATE);
+            int sampleRate = mf.getInteger(MediaFormat.KEY_SAMPLE_RATE);
+
+            fd.close();
+
+            Log.d(TAG, String.format("loading: %s, bitRate: %s, sampleRate: %s", symbol, bitRate, sampleRate));
+
+            int soundId = soundPool.load(context, resId, 0);
+            notes.put(symbol, new MetronomeNote(symbol, soundId, volume));
+        } catch (IOException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
     }
 
     private int resolveResourceId(String resourceName) {
@@ -179,22 +233,22 @@ public class SoundMetronome implements Metronome {
         }
     }
 
-    private void scheduleBeat() {
+    @Override
+    public void run() {
         if (!isPlaying) return;
 
-
-        handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                beatCount += 1;
-                scheduleBeat();
-            }
-        }, delayInterval());
-
         playSingleNote(currentBuffer());
+        beatCount += 1;
+        handler.postDelayed(this, delayInterval());
     }
 
     private long delayInterval() {
-        return 60000 / bpm / measure.length();
+        long diff = 1000 * 1000L / delayDiff;
+        long interval = 60L * diff / bpm / measure.length();
+
+        Log.d(TAG, String.format("interval %s (-+ %s)", interval, Math.abs(diff - 1000L)));
+
+        return interval;
+
     }
 }
