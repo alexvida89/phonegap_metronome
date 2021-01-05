@@ -23,6 +23,7 @@
         <source-file src="src/android/SoundMetronome.java" target-dir="src/org/cordova/plugins/metronome"/>
         <source-file src="src/android/MetronomeNote.java" target-dir="src/org/cordova/plugins/metronome"/>
         <source-file src="src/android/ToneGenerator.java" target-dir="src/org/cordova/plugins/metronome"/>
+        <source-file src="src/android/HapticFeedback.java" target-dir="src/org/cordova/plugins/metronome"/>
 
         <resource-file src="src/android/res/raw/hq_woodblock_high_ogg.ogg" target="res/raw/hq_woodblock_high_ogg.ogg" />
         <resource-file src="src/android/res/raw/hq_woodblock_mid_ogg.ogg" target="res/raw/hq_woodblock_mid_ogg.ogg" />
