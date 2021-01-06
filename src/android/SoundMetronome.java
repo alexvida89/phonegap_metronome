@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Vibrator;
 import android.util.Log;
-import android.view.HapticFeedbackConstants;
 
 import androidx.annotation.RequiresApi;
 
@@ -120,7 +119,7 @@ public class SoundMetronome implements Metronome, HapticFeedback, Runnable {
 
     @Override
     public void haptic() {
-        vibrator.vibrate(HapticFeedbackConstants.CONFIRM);
+        vibrator.vibrate(16); // HapticFeedbackConstants.CONFIRM constant is not working on cordova
     }
 
     private void playSingleNote(MetronomeNote note) {
